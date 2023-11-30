@@ -1,3 +1,4 @@
+// cu 스크래핑
 const puppeteer = require("puppeteer");
 
 async function run() {
@@ -14,7 +15,7 @@ async function run() {
                 badge: e.querySelector(".badge span").innerText,
                 img: e.querySelector(".prod_img img").src,
                 name: e.querySelector(".name p").innerText,
-                price: e.querySelector(".price").innerText.trim(),
+                price: e.querySelector(".price").innerText.trim()
             }))
         );
         eventItems = eventItems.concat(newItems);

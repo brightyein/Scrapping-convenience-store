@@ -1,38 +1,27 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
+// gs25 스크래핑
 const puppeteer = require('puppeteer');
 
-// 크롤링
-async function gs() {
-    const url = 'http://gs25.gsretail.com/gscvs/ko/products/event-goods#;';
-    const response = await axios.get(url);
-    return response.data // -> String
-    // console.log('consoleLog', response.data);
+async function run() {
+    const browser = await puppeteer.launch({headless: "new"});
+    const page = await browser.newPage();
+    await page.goto('http://gs25.gsretail.com/gscvs/ko/products/event-goods#;');
+
+    const evevtItems = await page.evaluate(() => {
+
+        const allTblwraps = document.querySelectorAll('.tblwrap.mt50');
+        const lastTblwrap = allTblwraps[allTblwraps.length - 1];
+
+        return Array.from(lastTblwrap.querySelectorAll('ul li')).map(e => ({
+            badge: e.querySelector(".flg01").innerText,
+            img: e.querySelector(".img img").src,
+            name: e.querySelector(".tit").innerText,
+            price: e.querySelector(".cost").innerText
+        }))
+    });
+
+    console.log(evevtItems);
+
+    await browser.close();
 }
 
-
-// 파싱
-gs().then(html =>{
-    let prodList = [];
-    const $ = cheerio.load(html)
-    const $bodyList = $(".eventtab div");
-
-    // console.log('consoleLog', $bodyList);
-
-    $bodyList.each(function (i, element) {
-        let nameContent = "";
-
-        const style = $(this).attr("style");
-        if (style && style.includes("display: block")) {
-            nameContent = $(this).find("ul.prod_list").text().trim();
-        }
-
-        console.log(nameContent);
-
-        prodList[i] = {
-
-            name: nameContent
-        }
-    });
-    console.log('prodList', prodList);
-})
+run();
