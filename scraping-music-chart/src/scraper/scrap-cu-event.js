@@ -1,30 +1,44 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-const puppeteer = require('puppeteer');
+// cu 스크래핑
+const express = require('express');
+const puppeteer = require("puppeteer");
 
-// 크롤링
-async function cu() {
-    const url = 'https://cu.bgfretail.com/event/plus.do?category=event&depth2=1&sf=N';
-    const response = await axios.get(url);
-    return response.data // -> String
-    // console.log('consoleLog', response.data);
+async function run() {
+    const browser = await puppeteer.launch({headless: "new"});
+    const page = await browser.newPage();
+    await page.goto('https://cu.bgfretail.com/event/plus.do?category=event&depth2=1&sf=N');
+
+    let eventItems = [];
+    let loadMore = true;
+
+    while (loadMore) {
+        let newItems = await page.evaluate(() =>
+            Array.from(document.querySelectorAll(".prodListWrap ul li"), (e) => ({
+                badge: e.querySelector(".badge span").innerText,
+                img: e.querySelector(".prod_img img").src,
+                name: e.querySelector(".name p").innerText,
+                price: e.querySelector(".price").innerText.trim()
+            }))
+        );
+        eventItems = eventItems.concat(newItems);
+
+        loadMore = await page.evaluate(() => {
+            let moreButton = document.querySelector("a[href*='javascript:nextPage(1)']");
+            if (moreButton) {
+                nextPage(1);
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        if (loadMore) {
+            await page.waitForTimeout(3000); //
+        }
+    }
+
+    console.log(eventItems);
+    await browser.close();
+    return eventItems;
 }
 
-
-// 파싱
-cu().then(html =>{
-    let prodList = [];
-    const $ = cheerio.load(html)
-    const $bodyList = $('div.relCon');
-
-    console.log('consoleLog', $bodyList);
-
-    $bodyList.each(function (i, element) {
-        // console.log($(this).html());
-
-        prodList[i] = {
-            name: $(this).find("").text().trim()
-        }
-    });
-    console.log('prodList', prodList);
-})
+module.exports = run();

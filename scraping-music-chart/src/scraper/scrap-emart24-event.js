@@ -1,3 +1,4 @@
+const express = require('express');
 const axios = require("axios");
 const cheerio = require("cheerio");
 
@@ -24,5 +25,8 @@ emart24(1).then(html =>{
             event: $(this).find(".itemTit span").text().trim()
         }
     });
-    console.log('prodList', prodList);
+    // console.log('prodList', prodList);
+    return prodList;
 })
+
+module.exports = emart24();
