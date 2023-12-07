@@ -19,10 +19,10 @@ emart24(1).then(html =>{
     $bodyList.each(function (i, element) {
 
         prodList[i] = {
+            event: $(this).find(".itemTit span").text().trim(),
             img: $(this).find(".itemImg img").attr('src'),
             name: $(this).find("p").text().trim(),
-            price: $(this).find(".price").text().trim(),
-            event: $(this).find(".itemTit span").text().trim()
+            price: $(this).find(".price").text().trim()
         }
     });
     // console.log('prodList', prodList);

@@ -13,7 +13,7 @@ async function run() {
     while (loadMore) {
         let newItems = await page.evaluate(() =>
             Array.from(document.querySelectorAll(".prodListWrap ul li"), (e) => ({
-                badge: e.querySelector(".badge span").innerText,
+                event: e.querySelector(".badge span").innerText,
                 img: e.querySelector(".prod_img img").src,
                 name: e.querySelector(".name p").innerText,
                 price: e.querySelector(".price").innerText.trim()

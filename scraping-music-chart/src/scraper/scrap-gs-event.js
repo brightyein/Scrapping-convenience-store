@@ -13,7 +13,7 @@ async function scrapeGS25() {
         const lastTblwrap = allTblwraps[allTblwraps.length - 1];
 
         return Array.from(lastTblwrap.querySelectorAll('ul li')).map(e => ({
-            badge: e.querySelector(".flg01").innerText,
+            event: e.querySelector(".flg01").innerText,
             img: e.querySelector(".img img").src,
             name: e.querySelector(".tit").innerText,
             price: e.querySelector(".cost").innerText
