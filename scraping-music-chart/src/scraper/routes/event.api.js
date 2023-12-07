@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const scrapeGS25 = require('../scrap-gs-event')
 const scrapeEmart24 = require('../scrap-emart24-event')
-const scrapeCU = require('../scrap-cu-event')
+const Prod = require('../models/prods')
 
 router.get('/gs', async (req, res) => {
     try {
@@ -16,7 +16,7 @@ router.get('/gs', async (req, res) => {
 
 router.get('/cu', async (req, res) => {
     try {
-        const items = await scrapeCU;
+        const items = await Prod.find({});
         res.json(items);
     } catch (error) {
         console.error(error);
