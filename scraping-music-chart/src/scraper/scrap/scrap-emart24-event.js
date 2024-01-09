@@ -40,10 +40,15 @@ emart24(1).then(html =>{
 
     // DB 저장
     function saveAllProducts(prodList) {
-        Promise.all(prodList.map(item => {
-            const prod = new emart24Prod(item);
-            return prod.save();
-        }))
+
+        emart24Prod.deleteMany({})
+            .then(() => {
+                return Promise.all(prodList.map(item => {
+                    const prod = new emart24Prod(item);
+                    return prod.save();
+                }))
+            })
+
             .then(() => {
                 console.log("모든 항목 저장 성공");
             })

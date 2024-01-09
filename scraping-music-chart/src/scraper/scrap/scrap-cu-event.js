@@ -55,10 +55,16 @@ async function run() {
     // DB 저장
     function saveAllProducts(eventItems) {
 
-        Promise.all(eventItems.map(item => {
-            const prod = new cuProd(item);
-            return prod.save();
-        }))
+        // 먼저 기존 데이터 모두 삭제
+        cuProd.deleteMany({})
+            .then(() => {
+                // 새 데이터 저장
+                return Promise.all(eventItems.map(item => {
+                    const prod = new cuProd(item);
+                    return prod.save();
+                }))
+            })
+
             .then(() => {
                 console.log("모든 항목 저장 성공");
             })

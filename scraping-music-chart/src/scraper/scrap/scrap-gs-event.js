@@ -36,10 +36,15 @@ async function scrapeGS25() {
 
     // DB 저장
     function saveAllProducts(eventItems) {
-        Promise.all(eventItems.map(item => {
-            const prod = new gsProd(item);
-            return prod.save();
-        }))
+
+        gsProd.deleteMany({})
+            .then(() => {
+                return Promise.all(eventItems.map(item => {
+                    const prod = new gsProd(item);
+                    return prod.save();
+                }))
+            })
+
             .then(() => {
                 console.log("모든 항목 저장 성공");
             })
