@@ -1,20 +1,7 @@
 // cu 스크래핑
 const express = require('express');
 const puppeteer = require("puppeteer");
-const mongoose = require('mongoose');
 const {cuProd} = require("../models/prods");
-const mongoUri = 'mongodb://localhost:27017/Scrapping-convenience-store';
-
-// DB 연결
-mongoose
-    .connect(mongoUri, { useNewUrlParser: true })
-    .then(() => {
-        console.log('mongoose connected');
-    })
-    .catch((err) => {
-        console.log("DB connection fail", err);
-    });
-
 
 async function run() {
     const browser = await puppeteer.launch({headless: "new"});
@@ -78,4 +65,4 @@ async function run() {
 
 }
 
-module.exports = run();
+module.exports = run;

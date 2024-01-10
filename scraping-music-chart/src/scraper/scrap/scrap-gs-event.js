@@ -1,19 +1,7 @@
 // gs25 스크래핑
 const express = require('express');
 const puppeteer = require('puppeteer');
-const mongoose = require('mongoose');
 const {gsProd, emart24Prod} = require("../models/prods");
-const mongoUri = 'mongodb://localhost:27017/Scrapping-convenience-store';
-
-// DB 연결
-mongoose
-    .connect(mongoUri, { useNewUrlParser: true })
-    .then(() => {
-        console.log('mongoose connected');
-    })
-    .catch((err) => {
-        console.log("DB connection fail", err);
-    });
 
 // 크롤링
 async function scrapeGS25() {
@@ -60,4 +48,4 @@ async function scrapeGS25() {
     return eventItems;
 }
 
-module.exports = scrapeGS25();
+module.exports = scrapeGS25;

@@ -1,17 +1,7 @@
 const express = require('express');
 const axios = require("axios");
 const cheerio = require("cheerio");
-const mongoose = require('mongoose');
 const {emart24Prod} = require("../models/prods");
-const mongoUri = 'mongodb://localhost:27017/Scrapping-convenience-store';
-mongoose
-    .connect(mongoUri, { useNewUrlParser: true })
-    .then(() => {
-        console.log('mongoose connected');
-    })
-    .catch((err) => {
-        console.log("DB connection fail", err);
-    });
 
 // 크롤링
 async function emart24(page) {
@@ -59,4 +49,4 @@ emart24(1).then(html =>{
     saveAllProducts(prodList);
 })
 
-module.exports = emart24();
+module.exports = emart24;
